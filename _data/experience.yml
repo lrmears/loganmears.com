@@ -3,7 +3,7 @@
 - company: Blue Cross and Blue Shield of Nebraska
   position: Security Analyst Intern
   duration: Jun, 2024 &mdash; Present
-  summary: My role involves identifying, investigating, and resolving security threats, utilizing the following types of tools:<ul class="resume-item-list"><li>Security Information and Event Management (SIEM)/Security Orchestration, Automation, and Response (SOAR) </li><li>Endpoint Detection and Response (EDR)</li><li>E-mail security tooling</li></ul>
+  summary: <ul class="resume-item-list"><li>Tune and optimize alerts in Microsoft Sentinel using KQL to enhance threat detection and response capabilities</li><li>Utilize Proofpoint TAP and KnowBe4 to review and investigate phishing emails, enhancing the organization’s email security posture</li><li>Evaluate security solutions to determine their suitability for implementation, ensuring alignment with organization security requirements and objectives</li></ul>
 
 # NULLify
 - company: NULLify
