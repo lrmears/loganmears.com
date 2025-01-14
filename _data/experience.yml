@@ -1,24 +1,25 @@
 # Jobs
+
+# Gallup
+- company: Gallup
+  position: Cybersecurity Engineer
+  duration: Jan, 2025 &mdash; Jan, Present
+  summary: <ul class="resume-item-list"><li>Collaborate with system/network/cloud architects and administrators to implement security best practices and baselines, address risks, and provide mitigation recommendations</li><li>Continuously monitor cloud applications, systems, databases and networks using SIEM tools</li><li>Assist in troubleshooting and solving a wide variety of security issues</li></ul>
+
 # BCBSNE
 - company: Blue Cross and Blue Shield of Nebraska
   position: Security Analyst Intern
-  duration: Jun, 2024 &mdash; Present
+  duration: Jun, 2024 &mdash; Jan, 2025
   summary: <ul class="resume-item-list"><li>Tune and optimize alerts in Microsoft Sentinel using KQL to enhance threat detection and response capabilities</li><li>Utilize Proofpoint TAP and KnowBe4 to review and investigate phishing emails, enhancing the organization’s email security posture</li><li>Evaluate security solutions to determine their suitability for implementation, ensuring alignment with organization security requirements and objectives</li></ul>
 
 # NULLify
 - company: NULLify
   position: President
-  duration: May, 2024 &mdash; Present
+  duration: May, 2024 &mdash; Dec, 2024
   summary: <ul class="resume-item-list"><li>Lead and organize club meetings, guest speaker events, and CTF competitions to promote cybersecurity awareness</li><li>Coordinate hands-on training sessions and workshops, providing members with practical experience in cybersecurity tools and techniques</li></ul>
 
 # UNO
 - company: University of Nebraska-Omaha
   position: Cybersecurity Research Assistant
-  duration:  Jan, 2024 &mdash; Present
+  duration:  Jan, 2024 &mdash; Dec, 2024
   summary: <ul class="resume-item-list"><li>Develop an introductory cybersecurity course for the Ponca Tribe of Nebraska</li><li>Conduct a comprehensive literature review on cybersecurity fundamentals and relevant educational approaches</li><li>Maintain detailed documentation of the research process, methodologies, and decisions made</li></ul>
-
-# Hy-Vee
-- company: Hy-Vee Inc.
-  position: Pricing & Data Specialist
-  duration:   Dec, 2021  &mdash; Jan, 2024
-  summary: <ul class="resume-item-list"><li>Maintained and updated pricing data through data entry using internal product management software</li><li>Conducted pricing data analysis to ensure competitive pricing alignment with local competitors for products</li><li>Facilitated communication of pricing changes to various store departments through email and in-person conversations</li></ul>
