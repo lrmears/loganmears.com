@@ -14,7 +14,7 @@ resume_name:                    "Logan Mears"
 resume_title:                   "Cybersecurity Engineer"
 
 # used for the contact button in _layouts/resume.html
-resume_contact_email:           "logan@loganmears.com"
+resume_contact_email:           "contact@loganmears.com"
 
 resume_header_contact_info:     "Omaha, NE"
 display_header_contact_info:    "true"
@@ -25,7 +25,7 @@ resume_header_intro: "<p>As a dedicated cybersecurity engineer at Gallup, I brin
 # "no" to display an "I'm not looking for work" message,
 # or remove the resume_looking_for_work option entirely
 # to leave blank
-# resume_looking_for_work:        "no"
+resume_looking_for_work:        "yes"
 
 # Decide which sections to use
 # comment out to hide
