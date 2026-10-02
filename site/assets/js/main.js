@@ -1,9 +1,9 @@
-import { initTerminal } from './terminal.js';
-import { initPalette } from './palette.js';
-import { initTimeline } from './timeline.js';
-import { initRunning } from './running.js';
-import * as sound from './sound.js';
-import { decryptHeadings } from './fx.js';
+import { initTerminal } from './terminal.js?v=__BUILD__';
+import { initPalette } from './palette.js?v=__BUILD__';
+import { initTimeline } from './timeline.js?v=__BUILD__';
+import { initRunning } from './running.js?v=__BUILD__';
+import * as sound from './sound.js?v=__BUILD__';
+import { decryptHeadings } from './fx.js?v=__BUILD__';
 
 const $ = id => document.getElementById(id);
 const root = document.documentElement;

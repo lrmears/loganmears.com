@@ -85,6 +85,7 @@ kbd{font:500 .75rem 'JetBrains Mono',monospace;border:1px solid var(--line);bord
 .htl-node.active .htl-dot::after{content:"";position:absolute;inset:-7px;border-radius:9px;border:2px solid var(--ink);animation:ring 1.8s ease-out infinite}
 @keyframes ring{0%{transform:scale(.8);opacity:.7}100%{transform:scale(1.6);opacity:0}}
 .section-head h2 span{display:inline-block;min-width:0}
+.section-head h2.dx{opacity:0}
 
 /* sections */
 .section{padding-top:104px}
