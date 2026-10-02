@@ -1,6 +1,7 @@
 import { initTerminal } from './terminal.js';
 import { initPalette } from './palette.js';
 import { initTimeline } from './timeline.js';
+import { initRunning } from './running.js';
 import * as sound from './sound.js';
 import { decryptHeadings } from './fx.js';
 
@@ -80,6 +81,7 @@ document.querySelectorAll('.flip').forEach(f => f.addEventListener('click', () =
 
 // Game
 const terminal = initTerminal();
+initRunning();
 
 // Effects
 decryptHeadings('.section-head h2');
@@ -98,6 +100,7 @@ initPalette([
   { label: 'Go to About', hint: 'section', run: go('about') },
   { label: 'Go to Timeline', hint: 'section', run: go('timeline') },
   { label: 'Go to Play', hint: 'section', run: go('play') },
+  { label: 'Go to Running', hint: 'section', run: go('running') },
   { label: 'Go to Toolkit', hint: 'section', run: go('toolkit') },
   { label: 'Go to Contact', hint: 'section', run: go('contact') },
   { label: 'Play GeoTrace (daily case)', hint: 'game', run: () => { go('play')(); setTimeout(terminal.focus, 500); } },
