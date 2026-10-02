@@ -185,6 +185,11 @@ kbd{font:500 .75rem 'JetBrains Mono',monospace;border:1px solid var(--line);bord
   backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .5s;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
 .face.back{transform:rotateX(180deg);background:var(--green);color:#fff;border-color:var(--green);font-size:.82rem}
 .gold .face.back{background:var(--yellow);border-color:var(--yellow)}
+.strengths{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:10px}
+.strengths li{display:flex;align-items:center;gap:10px;padding:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.rank{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:8px;background:var(--green);color:#fff;font:700 .95rem Inter,sans-serif}
+.sname{font:800 1.05rem Fraunces,serif}
+.fine{font-size:.78rem;margin:14px 0 0}
 .flip.on .front{transform:rotateX(-180deg)}.flip.on .back{transform:rotateX(0)}
 .hint{margin-top:22px}
 .footer{padding-block:90px 40px;text-align:center;color:var(--muted);font-size:.9rem}
