@@ -1,6 +1,6 @@
 // Horizontal timeline. Reads the semantic <ol id="tl"> (also the no-JS fallback) and builds
 // a scrollable rail of nodes plus a detail panel. Keyboard: ←/→, Home/End.
-import { note } from './sound.js';
+import { note } from './sound.js?v=__BUILD__';
 
 export function initTimeline() {
   const src = document.getElementById('tl');

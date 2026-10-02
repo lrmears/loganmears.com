@@ -1,7 +1,7 @@
 // "GeoTrace": a terminal game. Gather recon clues, then `guess <country>` to attribute the attack.
-import { COUNTRIES } from './countries.js';
-import { note, fanfare } from './sound.js';
-import { confetti } from './fx.js';
+import { COUNTRIES } from './countries.js?v=__BUILD__';
+import { note, fanfare } from './sound.js?v=__BUILD__';
+import { confetti } from './fx.js?v=__BUILD__';
 
 const HOME = [41.26, -95.93]; // Omaha, where the (fictional) sensor sits
 const MAX_GUESSES = 6, EPOCH = new Date(2026, 0, 1);

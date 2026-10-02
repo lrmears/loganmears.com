@@ -1,6 +1,6 @@
 // Running section: last-28-days cards and charts (weekly miles, cumulative miles, indoor/outdoor mix, run lengths). Data is an aggregate snapshot.
-import { RUNNING } from './running-data.js';
-import { note } from './sound.js';
+import { RUNNING } from './running-data.js?v=__BUILD__';
+import { note } from './sound.js?v=__BUILD__';
 
 const $ = id => document.getElementById(id);
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;

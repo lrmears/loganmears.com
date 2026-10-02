@@ -35,7 +35,8 @@ export function confetti(x = innerWidth / 2, y = innerHeight / 3) {
   kick();
 }
 
-// Scramble headings into place as they scroll into view.
+// Scramble headings into place as they scroll into view. The real text always stays in the DOM
+// (crawlers and screen readers read it); the heading is only visually held back until it reveals.
 const GLYPHS = '01<>/\\|-_+*#';
 export function decryptHeadings(selector) {
   if (reduced || !('IntersectionObserver' in window)) return;
@@ -43,6 +44,7 @@ export function decryptHeadings(selector) {
   const io = new IntersectionObserver(entries => entries.forEach(e => {
     if (!e.isIntersecting) return; io.unobserve(e.target);
     const { span, final } = e.target._dx, start = performance.now(), dur = 650 + final.length * 18;
+    span.textContent = scramble(final, 0); e.target.classList.remove('dx');
     (function tick(now) {
       const p = Math.min(1, (now - start) / dur);
       span.textContent = scramble(final, Math.floor(p * final.length));
@@ -51,8 +53,7 @@ export function decryptHeadings(selector) {
   }), { threshold: .6 });
   document.querySelectorAll(selector).forEach(h => {
     const final = h.textContent, span = document.createElement('span');
-    h.setAttribute('aria-label', final); span.setAttribute('aria-hidden', 'true');
-    span.textContent = scramble(final, 0); h.textContent = ''; h.appendChild(span);
-    h._dx = { span, final }; io.observe(h);
+    span.textContent = final; h.textContent = ''; h.appendChild(span);
+    h._dx = { span, final }; h.classList.add('dx'); io.observe(h);
   });
 }
