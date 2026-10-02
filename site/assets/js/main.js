@@ -2,6 +2,7 @@ import { initTerminal } from './terminal.js';
 import { initPalette } from './palette.js';
 import { initTimeline } from './timeline.js';
 import * as sound from './sound.js';
+import { decryptHeadings } from './fx.js';
 
 const $ = id => document.getElementById(id);
 const root = document.documentElement;
@@ -26,17 +27,20 @@ function syncSound() {
 function toggleSound() { sound.setOn(!sound.isOn()); syncSound(); }
 soundBtn.addEventListener('click', toggleSound); syncSound();
 
-// Hero tiles
-const palette = ['green', 'yellow', 'gray', 'green', 'yellow'];
+// Hero tiles: flip in on load, replay on hover, cycle color on click, and ripple now and then
+const states = ['green', 'yellow', 'gray'], heroTiles = [];
 document.querySelectorAll('.tile-row').forEach((rowEl, r) => {
   [...rowEl.dataset.word].forEach((ch, i) => {
     const t = document.createElement('span'); t.className = 'tile'; t.textContent = ch; rowEl.appendChild(t);
-    const color = palette[(i + r * 2) % 5];
+    let color = states[(i + r * 2) % 3];
     const play = () => { t.classList.remove('turn', 'green', 'yellow', 'gray'); void t.offsetWidth; t.classList.add('turn'); sound.note(i + r * 2, .15); setTimeout(() => t.classList.add(color), 250); };
+    t._play = play; heroTiles.push(t);
     if (reduced) t.classList.add(color); else setTimeout(play, 300 + (r * 5 + i) * 180);
     t.addEventListener('mouseenter', play);
+    t.addEventListener('click', () => { color = states[(states.indexOf(color) + 1) % 3]; play(); });
   });
 });
+if (!reduced) setInterval(() => { if (!document.hidden) heroTiles.forEach((t, k) => setTimeout(t._play, k * 90)); }, 20000);
 
 // Count-up stats
 document.querySelectorAll('[data-count]').forEach(el => {
@@ -76,6 +80,17 @@ document.querySelectorAll('.flip').forEach(f => f.addEventListener('click', () =
 
 // Game
 const terminal = initTerminal();
+
+// Effects
+decryptHeadings('.section-head h2');
+const avatar = document.querySelector('.avatar');
+if (avatar && !reduced && matchMedia('(hover: hover)').matches) {
+  avatar.addEventListener('pointermove', e => {
+    const r = avatar.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+    avatar.style.setProperty('--rx', (-y * 14) + 'deg'); avatar.style.setProperty('--ry', (x * 14) + 'deg');
+  });
+  avatar.addEventListener('pointerleave', () => { avatar.style.setProperty('--rx', '0deg'); avatar.style.setProperty('--ry', '0deg'); });
+}
 
 // Command palette
 const go = id => () => { document.getElementById(id).scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' }); };
