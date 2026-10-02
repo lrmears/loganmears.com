@@ -7,7 +7,12 @@ export function initPalette(commands) {
     const q = input.value.trim().toLowerCase();
     shown = commands.filter(c => q.split(/\s+/).every(w => c.label.toLowerCase().includes(w)));
     sel = Math.min(sel, Math.max(0, shown.length - 1));
-    list.innerHTML = shown.map((c, i) => `<li role="option" data-i="${i}" aria-selected="${i === sel}"><span>${c.label}</span><small>${c.hint || ''}</small></li>`).join('') || '<li>No matches</li>';
+    list.replaceChildren(...(shown.length ? shown : [{ label: 'No matches' }]).map((c, i) => {
+      const li = document.createElement('li'), l = document.createElement('span'), h = document.createElement('small');
+      l.textContent = c.label; h.textContent = c.hint || ''; li.append(l, h);
+      if (shown.length) { li.setAttribute('role', 'option'); li.dataset.i = i; li.setAttribute('aria-selected', i === sel); }
+      return li;
+    }));
   };
   const open = () => { opener = document.activeElement; root.hidden = false; input.value = ''; sel = 0; render(); input.focus(); };
   const close = () => { root.hidden = true; opener && opener.focus && opener.focus(); };

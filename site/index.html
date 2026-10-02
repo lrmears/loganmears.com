@@ -2,12 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Logan Mears · Cybersecurity Engineer</title>
-  <meta name="description" content="Logan Mears is a platform security engineer, word-game fan. Explore his timeline, play a daily word game, or crack a cipher.">
+  <meta name="description" content="Logan Mears is a platform security engineer and geography-game fan. Explore his timeline, or play GeoTrace and trace an attacker to their country.">
   <meta name="theme-color" content="#14151a">
   <meta property="og:title" content="Logan Mears">
-  <meta property="og:description" content="Platform security engineer and word-game fan. Come play.">
+  <meta property="og:description" content="Platform security engineer. Come trace an attacker.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://loganmears.com">
   <link rel="canonical" href="https://loganmears.com/">
@@ -16,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css">
-  <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script src="assets/js/theme.js"></script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Logan Mears","jobTitle":"Platform Security Engineer","worksFor":{"@type":"Organization","name":"Gallup"},"alumniOf":{"@type":"CollegeOrUniversity","name":"University of Nebraska-Omaha"},"url":"https://loganmears.com","sameAs":["https://www.linkedin.com/in/loganrmears/"]}</script>
 </head>
 <body>
@@ -29,7 +31,7 @@
     <a href="#about">About</a><a href="#timeline">Timeline</a><a href="#play">Play</a><a href="#toolkit">Toolkit</a><a href="#contact">Contact</a>
   </div>
   <div class="nav-actions">
-    <button class="kbd-btn" id="open-palette" type="button" aria-label="Open command menu"><span>Jump to…</span><kbd>⌘K</kbd></button>
+    <button class="kbd-btn" id="open-palette" type="button" aria-label="Open command menu"><span class="kbd-label">Jump to…</span><span class="kbd-menu" aria-hidden="true">☰</span><kbd>⌘K</kbd></button>
     <button class="icon-btn" id="sound-toggle" type="button" aria-pressed="false" aria-label="Sound effects off" title="Sound effects">♪</button>
     <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Theme">◐</button>
   </div>
@@ -44,39 +46,51 @@
           <span class="tile-row" data-word="LOGAN" aria-hidden="true"></span>
           <span class="tile-row" data-word="MEARS" aria-hidden="true"></span>
         </h1>
-        <p class="lede">I keep cloud platforms safe by day. Off the clock I like CTFs and word games. This site is part resume, part playground, so stay a while.</p>
+        <p class="lede">I help secure cloud and on-premises environments at Gallup, with a focus on detection, monitoring and strong security baselines. Explore my background below, then try GeoTrace, a small security-themed game.</p>
         <div class="cta">
-          <a class="btn primary" href="#play">Play today's word</a>
+          <a class="btn primary" href="#play">Play GeoTrace</a>
           <a class="btn" href="#timeline">Explore the timeline</a>
         </div>
       </div>
       <figure class="portrait">
-        <img src="images/avatar.jpg" alt="Illustrated portrait of Logan Mears" width="320" height="320" fetchpriority="high">
+        <div class="avatar"><img src="images/avatar.jpg" alt="Illustrated portrait of Logan Mears" width="320" height="320" fetchpriority="high"></div>
         <figcaption>Platform Security Engineer</figcaption>
       </figure>
     </div>
-    <div class="wrap stats" aria-label="Highlights">
-      <div><b data-count="2">0</b><span>degrees from UNO</span></div>
-      <div><b data-count="4">0</b><span>industry certifications</span></div>
-      <div><b data-count="6">0</b><span>milestones since 2023</span></div>
-      <div><b>🚩</b><span>led a university security club</span></div>
+    <div class="wrap stats" aria-label="Highlights (select a card for details)">
+      <button class="stat" type="button" aria-pressed="false">
+        <span class="sface sfront"><b data-count="2">0</b><span>degrees from UNO</span></span>
+        <span class="sface sback"><span><strong>B.S. Cybersecurity</strong>, minor in Computer Science (Dec 2024, Magna Cum Laude)<br><strong>B.A. Music Studies</strong> (May 2023, Cum Laude)</span></span>
+      </button>
+      <button class="stat" type="button" aria-pressed="false">
+        <span class="sface sfront"><b data-count="4">0</b><span>industry certifications</span></span>
+        <span class="sface sback"><span>CompTIA Security+<br>(ISC)² Certified in Cybersecurity<br>Microsoft AZ-900 and SC-900</span></span>
+      </button>
+      <button class="stat" type="button" aria-pressed="false">
+        <span class="sface sfront"><b data-count="6">0</b><span>milestones since 2023</span></span>
+        <span class="sface sback"><span>Two degrees, a research role, a club presidency, a security internship and a full-time security engineering role. See the timeline below.</span></span>
+      </button>
+      <button class="stat" type="button" aria-pressed="false">
+        <span class="sface sfront"><b>🚩</b><span>led a university security club</span></span>
+        <span class="sface sback"><span><strong>President of NULLify</strong>, UNO's cybersecurity club (2024): meetings, guest speakers, CTFs and hands-on workshops.</span></span>
+      </button>
     </div>
   </header>
 
   <section class="section wrap" id="about">
-    <div class="section-head"><p class="kicker">01 · About</p><h2>Security by day, puzzles by night.</h2></div>
+    <div class="section-head"><p class="kicker">01 · About</p><h2>Building secure, well-monitored platforms.</h2></div>
     <div class="about-grid">
-      <p>I'm a platform security engineer at Gallup. I work with cloud, network and system architects to set security baselines, chase down risk, and keep a close eye on cloud applications, databases and networks through SIEM tooling.</p>
-      <p>I got here by an unusual route: a music degree first, then cybersecurity. I started hands-on at Blue Cross and Blue Shield of Nebraska, tuning detections in Microsoft Sentinel. I enjoy pattern-finding, which carries over into CTFs and word games.</p>
+      <p>I'm a Platform Security Engineer at Gallup, where I partner with cloud, network and system architects to establish security baselines, address risk and recommend mitigations. I also monitor applications, systems, databases and networks, in the cloud and on premises, using SIEM tooling.</p>
+      <p>My path into security began somewhere unconventional: a music degree. I built my hands-on foundation as a Security Analyst Intern at Blue Cross and Blue Shield of Nebraska, tuning detections in Microsoft Sentinel with KQL. Outside of work, I enjoy CTFs and geography games.</p>
       <ul class="interests">
-        <li>☁️ Cloud security</li><li>🛡️ Threat detection</li><li>🚩 CTFs</li><li>🔤 Word games</li>
+        <li>☁️ Cloud &amp; on-prem security</li><li>🛡️ Threat detection</li><li>🚩 CTFs</li><li>🌍 Geography games</li>
       </ul>
     </div>
   </section>
 
   <section class="section wrap" id="timeline">
     <div class="section-head">
-      <p class="kicker">02 · Timeline</p><h2>From classroom to the SOC.</h2>
+      <p class="kicker">02 · Timeline</p><h2>Career and education.</h2>
       <div class="filters" role="group" aria-label="Filter timeline">
         <button class="chip active" data-filter="all" type="button">All</button>
         <button class="chip" data-filter="work" type="button">Work</button>
@@ -87,8 +101,8 @@
     <ol class="timeline" id="tl">
       <li class="t-item" data-type="work"><span class="t-dot" aria-hidden="true"></span><article class="t-card">
         <time class="t-date">Jan 2025 → Present</time><h3>Platform Security Engineer</h3><p class="t-org">Gallup</p>
-        <ul><li>Partner with system, network and cloud architects to implement security baselines, address risks and recommend mitigations</li><li>Monitor cloud applications, systems, databases and networks with SIEM tools</li><li>Troubleshoot a wide variety of security issues</li></ul>
-        <p class="tags"><span>Cloud security</span><span>SIEM</span></p></article></li>
+        <ul><li>Partner with system, network and cloud architects to implement security baselines, address risks and recommend mitigations</li><li>Monitor cloud and on-premises applications, systems, databases and networks with SIEM tools</li><li>Troubleshoot a wide variety of security issues</li></ul>
+        <p class="tags"><span>Cloud &amp; on-prem</span><span>SIEM</span></p></article></li>
       <li class="t-item" data-type="school"><span class="t-dot" aria-hidden="true"></span><article class="t-card">
         <time class="t-date">Dec 2024</time><h3>B.S. Cybersecurity</h3><p class="t-org">University of Nebraska-Omaha · minor in Computer Science</p>
         <ul><li>Magna Cum Laude</li></ul><p class="tags"><span>Cybersecurity</span></p></article></li>
@@ -112,47 +126,71 @@
   </section>
 
   <section class="section wrap" id="play">
-    <div class="section-head"><p class="kicker">03 · Play</p><h2>Take a break.</h2>
-      <p>A daily word game with security-flavored answers, and a cipher to crack.</p></div>
-    <div class="tabs" role="tablist" aria-label="Puzzles">
-      <button role="tab" id="tab-word" aria-selected="true" aria-controls="panel-word" class="tab active" type="button">Daily word</button>
-      <button role="tab" id="tab-cipher" aria-selected="false" aria-controls="panel-cipher" class="tab" type="button" tabindex="-1">Cipher</button>
-    </div>
-
-    <div role="tabpanel" id="panel-word" aria-labelledby="tab-word" class="panel">
-      <div class="game" id="game">
-        <div class="game-bar">
-          <span class="pill" id="g-topic">Topic</span>
-          <span class="pill" id="g-mode">Daily</span>
-          <button class="pill btn-pill" id="g-practice" type="button">Practice word</button>
-          <button class="pill btn-pill" id="g-stats-btn" type="button">Stats</button>
-        </div>
-        <div class="board" id="board" role="grid" aria-label="Word game board"></div>
-        <p class="game-msg" id="g-msg" role="status" aria-live="polite">Guess the 5-letter word.</p>
-        <div class="kb" id="kb"></div>
-        <div class="result" id="g-result" hidden>
-          <pre id="g-share-text"></pre>
-          <button class="btn primary" id="g-share" type="button">Copy result</button>
-        </div>
-        <div class="stats-card" id="g-stats" hidden></div>
+    <div class="section-head"><p class="kicker">03 · Play</p><h2>GeoTrace</h2>
+      <p>A short, security-themed game. Investigate a simulated intrusion alert, use recon clues to work out where it originated, and name the country. A new case is available every day.</p></div>
+    <div class="panel terminal-panel">
+      <div class="game-bar">
+        <span class="pill" id="t-mode">Daily</span>
+        <button class="pill btn-pill" id="t-practice" type="button">Practice case</button>
+        <button class="how-btn" id="how-open" type="button" aria-label="How to play" title="How to play">?</button>
       </div>
-    </div>
-
-    <div role="tabpanel" id="panel-cipher" aria-labelledby="tab-cipher" class="panel" hidden>
-      <div class="cipher" id="cipher">
-        <p class="cipher-intro">A message came in encrypted. Julius Caesar would've shifted every letter by a fixed amount. Slide the dial until it reads like English.</p>
-        <output class="cipher-text mono" id="c-out" aria-live="polite"></output>
-        <label class="dial"><span>Shift: <b id="c-shift">0</b></span>
-          <input type="range" id="c-range" min="0" max="25" value="0" aria-label="Cipher shift"></label>
-        <p class="cipher-win" id="c-win" hidden>Decrypted. 🎉 Now say hello: <a href="mailto:contact@loganmears.com">contact@loganmears.com</a></p>
-        <button class="chip" id="c-hint" type="button">Need a hint?</button>
-        <p class="muted" id="c-hint-text" hidden>Try the most common letter in English, E, and see which letter in the ciphertext it could be.</p>
+      <div class="terminal" id="terminal">
+        <div class="t-bar" aria-hidden="true"><i></i><i></i><i></i><span>analyst@soc: ~</span></div>
+        <div class="t-screen" id="t-screen" role="log" aria-live="polite"></div>
+        <label class="t-input-row"><span aria-hidden="true">analyst@soc:~$</span>
+          <input id="t-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Terminal command"></label>
+      </div>
+      <div class="t-chips" aria-label="Quick commands">
+        <button class="chip t-chip" data-cmd="help" type="button">help</button>
+        <button class="chip t-chip" data-cmd="whois" type="button">whois</button>
+        <button class="chip t-chip" data-cmd="ping" type="button">ping</button>
+        <button class="chip t-chip" data-cmd="tz" type="button">tz</button>
+        <button class="chip t-chip" data-cmd="lang" type="button">lang</button>
+        <button class="chip t-chip" data-cmd="phone" type="button">phone</button>
+        <button class="chip t-chip" data-cmd="continent" type="button">continent</button>
+        <button class="chip t-chip" data-cmd="traceroute" type="button">traceroute</button>
+      </div>
+      <div class="result" id="t-result" hidden>
+        <pre id="t-share-text"></pre>
+        <button class="btn primary" id="t-share" type="button">Copy result</button>
       </div>
     </div>
   </section>
 
+  <dialog class="how" id="how" aria-labelledby="how-title">
+    <form method="dialog" class="how-close"><button class="icon-btn" aria-label="Close">✕</button></form>
+    <h3 id="how-title">How to play GeoTrace</h3>
+    <p><b>Goal:</b> identify which country an attack came from in 6 guesses or fewer, using as few recon commands as you can.</p>
+    <ol class="how-steps">
+      <li><b>Investigate.</b> Run recon commands in the terminal. Each reveals one clue about the attacker's connection.</li>
+      <li><b>Guess.</b> Type <code>guess &lt;country&gt;</code> (for example <code>guess japan</code>). Press <kbd>Tab</kbd> to autocomplete country names.</li>
+      <li><b>Read the feedback.</b> A wrong guess shows how far away the answer is, which direction it lies in, and a closeness percentage.</li>
+    </ol>
+    <h4>Recon commands</h4>
+    <dl class="how-cmds">
+      <dt>whois</dt><dd>The country-code domain (like <code>.fr</code>) of the attacker's registrant.</dd>
+      <dt>ping</dt><dd>Round-trip latency from the Omaha sensor. Farther away means slower.</dd>
+      <dt>tz</dt><dd>The timezone in the attacker's session logs.</dd>
+      <dt>lang</dt><dd>The browser's language header, like <code>ja-JP</code>.</dd>
+      <dt>phone</dt><dd>The country calling code of the MFA text-message number.</dd>
+      <dt>continent</dt><dd>The region the attacker's network is registered in.</dd>
+      <dt>traceroute</dt><dd>The network path. The last hop is named after the capital city, which is the biggest clue.</dd>
+    </dl>
+    <h4>Other commands</h4>
+    <p><code>help</code>, <code>countries</code> (all valid answers), <code>history</code>, <code>clear</code>, and <code>new</code> for a practice case. Use ↑ and ↓ to recall earlier commands.</p>
+    <h4>Reading a guess</h4>
+    <p class="how-sample"><code>✗ Japan: 13,501 km W ⬅️ (32% close)</code></p>
+    <p>That means the answer is about 13,500 km west of Japan. The closer to 100%, the warmer you are.</p>
+    <h4>Good to know</h4>
+    <ul>
+      <li>The daily case is the same for everyone and resets at midnight. Your progress is saved in this browser.</li>
+      <li>Sharing copies a spoiler-free emoji summary of your result.</li>
+      <li>The incident is fictional, and the IP address is from a reserved documentation range.</li>
+    </ul>
+  </dialog>
+
   <section class="section wrap" id="toolkit">
-    <div class="section-head"><p class="kicker">04 · Toolkit</p><h2>Tiles I've earned.</h2><p>Click one to flip it.</p></div>
+    <div class="section-head"><p class="kicker">04 · Toolkit</p><h2>Tools and certifications.</h2><p>Select a tile to learn more.</p></div>
     <h3 class="sub">Tools</h3>
     <div class="flip-grid">
       <button class="flip" type="button"><span class="face front">Splunk</span><span class="face back">SIEM</span></button>
@@ -173,10 +211,9 @@
   </section>
 
   <section class="section wrap" id="contact">
-    <div class="section-head"><p class="kicker">05 · Contact</p><h2>Let's talk.</h2><p>Security, CTFs, word games. All fair game.</p></div>
+    <div class="section-head"><p class="kicker">05 · Contact</p><h2>Get in touch.</h2><p>Interested in connecting? Reach out on LinkedIn.</p></div>
     <div class="cta">
-      <a class="btn primary" href="mailto:contact@loganmears.com">contact@loganmears.com</a>
-      <a class="btn" href="https://www.linkedin.com/in/loganrmears/" rel="noopener">LinkedIn</a>
+      <a class="btn primary" href="https://www.linkedin.com/in/loganrmears/" rel="noopener noreferrer">Connect on LinkedIn</a>
     </div>
     <p class="muted hint">Tip: press <kbd>⌘K</kbd> / <kbd>Ctrl K</kbd> anywhere to jump around.</p>
   </section>
@@ -192,6 +229,6 @@
 </div>
 
 <script type="module" src="assets/js/main.js"></script>
-<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+<noscript><link rel="stylesheet" href="assets/noscript.css"></noscript>
 </body>
 </html>
