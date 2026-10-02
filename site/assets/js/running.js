@@ -52,7 +52,7 @@ export function initRunning() {
   let run = 0; const totals = weeks.map(w => (run += w.miles));
   const W = 320, H = 150, P = { l: 8, r: 8, t: 12, b: 8 }, top = Math.ceil(run / 10) * 10;
   const X = i => P.l + i / (weeks.length - 1) * (W - P.l - P.r), Y = v => H - P.b - v / top * (H - P.t - P.b);
-  const cum = svg('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': `Cumulative miles rising to ${fmt(run)} over 12 weeks`, preserveAspectRatio: 'none' }, 'cum-svg');
+  const cum = svg('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': `Cumulative miles rising to ${fmt(run)} over 12 weeks` }, 'cum-svg');
   [0, .5, 1].forEach(f => cum.appendChild(svg('line', { x1: P.l, x2: W - P.r, y1: Y(top * f), y2: Y(top * f) }, 'grid')));
   const pts = totals.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`);
   cum.appendChild(svg('polygon', { points: `${X(0)},${Y(0)} ${pts.join(' ')} ${X(weeks.length - 1)},${Y(0)}` }, 'area'));
