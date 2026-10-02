@@ -144,25 +144,36 @@
       <p>A short, security-themed game. Investigate a simulated intrusion alert, use recon clues to work out where it originated, and name the country. A new case is available every day.</p></div>
     <div class="panel terminal-panel">
       <div class="game-bar">
-        <span class="pill" id="t-mode">Daily</span>
-        <button class="pill btn-pill" id="t-practice" type="button">Practice case</button>
-        <button class="how-btn" id="how-open" type="button" aria-label="How to play" title="How to play">?</button>
+        <div class="seg" role="group" aria-label="Game mode">
+          <button class="seg-btn active" id="t-mode-daily" type="button" aria-pressed="true">Daily</button>
+          <button class="seg-btn" id="t-mode-practice" type="button" aria-pressed="false" title="Start a practice case (doesn't affect your streak)">Practice</button>
+        </div>
+        <div class="bar-right">
+          <span class="pill" id="t-streak" title="Daily win streak">🔥 0</span>
+          <button class="icon-btn" id="t-stats-btn" type="button" aria-label="Stats and history" title="Stats and history"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 20V11M12 20V4M19 20v-6"/></svg></button>
+          <button class="icon-btn" id="how-open" type="button" aria-label="How to play" title="How to play">?</button>
+        </div>
       </div>
       <div class="terminal" id="terminal">
-        <div class="t-bar" aria-hidden="true"><i></i><i></i><i></i><span>analyst@soc: ~</span></div>
+        <div class="t-bar"><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i><span aria-hidden="true">analyst@soc: ~</span>
+          <button class="t-expand" id="t-expand" type="button" aria-expanded="false" aria-label="Expand to full screen" title="Expand (Esc to exit)">
+            <svg class="ic-expand" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg>
+            <svg class="ic-collapse" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10h-6V4M4 14h6v6M14 10l7-7M3 21l7-7"/></svg>
+          </button>
+        </div>
         <div class="t-screen" id="t-screen" role="log" aria-live="polite"></div>
         <label class="t-input-row"><span aria-hidden="true">analyst@soc:~$</span>
           <input id="t-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Terminal command"></label>
       </div>
-      <div class="t-chips" aria-label="Quick commands">
-        <button class="chip t-chip" data-cmd="help" type="button">help</button>
-        <button class="chip t-chip" data-cmd="whois" type="button">whois</button>
-        <button class="chip t-chip" data-cmd="ping" type="button">ping</button>
-        <button class="chip t-chip" data-cmd="tz" type="button">tz</button>
-        <button class="chip t-chip" data-cmd="lang" type="button">lang</button>
-        <button class="chip t-chip" data-cmd="phone" type="button">phone</button>
-        <button class="chip t-chip" data-cmd="continent" type="button">continent</button>
-        <button class="chip t-chip" data-cmd="traceroute" type="button">traceroute</button>
+      <div class="t-chips" id="t-chips" role="group" aria-label="Quick commands">
+        <button class="tchip t-chip" data-cmd="help" type="button" title="Show all commands"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.6 2.6 0 1 1 3.6 2.4c-.7.4-1.1 1-1.1 1.8M12 17h.01"/></svg>help</button>
+        <button class="tchip t-chip" data-cmd="whois" type="button" title="Registrant domain suffix"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>whois</button>
+        <button class="tchip t-chip" data-cmd="ping" type="button" title="Latency from the Omaha sensor"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>ping</button>
+        <button class="tchip t-chip" data-cmd="tz" type="button" title="Timezone in the session logs"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>tz</button>
+        <button class="tchip t-chip" data-cmd="lang" type="button" title="Browser language header"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H10l-5 4v-4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/><path d="M8 9h8M8 12h5"/></svg>lang</button>
+        <button class="tchip t-chip" data-cmd="phone" type="button" title="Phone number calling code"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/></svg>phone</button>
+        <button class="tchip t-chip" data-cmd="continent" type="button" title="Registry region of the network"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6-5.5-6-11a6 6 0 1 1 12 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2"/></svg>continent</button>
+        <button class="tchip t-chip" data-cmd="traceroute" type="button" title="Network path, ends at the nearest city"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M8 18h6a3 3 0 0 0 0-6h-4a3 3 0 0 1 0-6h6"/></svg>traceroute</button>
       </div>
       <div class="result" id="t-result" hidden>
         <pre id="t-share-text"></pre>
@@ -171,6 +182,13 @@
     </div>
   </section>
 
+  <dialog class="how" id="t-stats-dialog" aria-labelledby="t-stats-title">
+    <form method="dialog" class="how-close"><button class="icon-btn" aria-label="Close">✕</button></form>
+    <h3 id="t-stats-title">Your GeoTrace history</h3>
+    <div id="t-stats-body"></div>
+    <p><button class="chip" id="t-stats-clear" type="button">Clear history</button></p>
+  </dialog>
+
   <dialog class="how" id="how" aria-labelledby="how-title">
     <form method="dialog" class="how-close"><button class="icon-btn" aria-label="Close">✕</button></form>
     <h3 id="how-title">How to play GeoTrace</h3>
@@ -178,7 +196,7 @@
     <ol class="how-steps">
       <li><b>Investigate.</b> Run recon commands in the terminal. Each reveals one clue about the attacker's connection.</li>
       <li><b>Guess.</b> Type <code>guess &lt;country&gt;</code> (for example <code>guess japan</code>). Press <kbd>Tab</kbd> to autocomplete country names.</li>
-      <li><b>Read the feedback.</b> A wrong guess shows how far away the answer is, which direction it lies in, and a closeness percentage.</li>
+      <li><b>Read the feedback.</b> A wrong guess shows how far away the answer is, which direction it lies in, and a closeness percentage. The country you guessed is drawn next to the result, so you can learn the shapes as you play.</li>
     </ol>
     <h4>Recon commands</h4>
     <dl class="how-cmds">
@@ -191,13 +209,14 @@
       <dt>traceroute</dt><dd>The network path. The last hop is named after the capital city, which is the biggest clue.</dd>
     </dl>
     <h4>Other commands</h4>
-    <p><code>help</code>, <code>countries</code> (all valid answers), <code>history</code>, <code>clear</code>, and <code>new</code> for a practice case. Use ↑ and ↓ to recall earlier commands.</p>
+    <p><code>help</code>, <code>countries</code> (all valid answers), <code>history</code>, <code>stats</code>, <code>clear</code>, <code>expand</code> (fill the screen, <kbd>Esc</kbd> to exit), and <code>new</code> for a practice case. Use ↑ and ↓ to recall earlier commands.</p>
     <h4>Reading a guess</h4>
     <p class="how-sample"><code>✗ Japan: 13,501 km W ⬅️ (32% close)</code></p>
     <p>That means the answer is about 13,500 km west of Japan. The closer to 100%, the warmer you are.</p>
     <h4>Good to know</h4>
     <ul>
       <li>The daily case is the same for everyone and resets at midnight. Your progress is saved in this browser.</li>
+      <li>Solve the daily case on consecutive days to build a streak (the 🔥 count). Open <b>Stats</b> or type <code>stats</code> to see your history. Practice cases don't count.</li>
       <li>Sharing copies a spoiler-free emoji summary of your result.</li>
       <li>The incident is fictional, and the IP address is from a reserved documentation range.</li>
     </ul>
