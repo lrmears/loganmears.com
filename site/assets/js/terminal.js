@@ -1,6 +1,7 @@
 // "GeoTrace": a terminal game. Gather recon clues, then `guess <country>` to attribute the attack.
 import { COUNTRIES } from './countries.js';
 import { note, fanfare } from './sound.js';
+import { confetti } from './fx.js';
 
 const HOME = [41.26, -95.93]; // Omaha, where the (fictional) sensor sits
 const MAX_GUESSES = 6, EPOCH = new Date(2026, 0, 1);
@@ -90,7 +91,7 @@ export function initTerminal() {
     const [cmd, ...rest] = text.split(/\s+/), arg = rest.join(' ');
     const c = cmd.toLowerCase();
     if (!replay) { hist.push(text); hi = hist.length; }
-    if (over && !['clear', 'new', 'help', 'countries'].includes(c)) { line('Case closed. Type "new" for a practice case.', 'dim'); return; }
+    if (over && (CLUES[c] || c === 'guess' || c === 'g')) { line('Case closed. Type "new" for a practice case.', 'dim'); return; }
 
     if (CLUES[c]) {
       if (!replay) { cmds.push(text); save(); note(1 + clues.size, .08, 'square'); }
@@ -137,6 +138,7 @@ export function initTerminal() {
     line(`✓ ATTRIBUTION CONFIRMED: ${target.name}`, 'good');
     line(`Solved in ${guesses.length} guess${guesses.length > 1 ? 'es' : ''} using ${clues.size} recon command${clues.size === 1 ? '' : 's'}.`, 'good');
     finish(true); fanfare();
+    const r = box.getBoundingClientRect(); confetti(r.left + r.width / 2, r.top + r.height / 3);
   }
   function lose() {
     over = true; gap();

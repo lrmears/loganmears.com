@@ -75,6 +75,17 @@ kbd{font:500 .75rem 'JetBrains Mono',monospace;border:1px solid var(--line);bord
 .stat:hover .sfront,.stat:focus-visible .sfront{border-color:var(--green)}
 .stat.on .sfront{transform:rotateX(-180deg)}.stat.on .sback{transform:rotateX(0)}
 
+/* effects */
+.fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:70}
+.tile{cursor:pointer}
+.avatar{transform:perspective(700px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .2s ease-out;will-change:transform}
+.avatar::after{animation:presence 2.4s ease-out infinite}
+@keyframes presence{0%{box-shadow:0 0 0 0 rgba(46,182,125,.55)}70%,100%{box-shadow:0 0 0 14px rgba(46,182,125,0)}}
+.htl-dot{position:relative}
+.htl-node.active .htl-dot::after{content:"";position:absolute;inset:-7px;border-radius:9px;border:2px solid var(--ink);animation:ring 1.8s ease-out infinite}
+@keyframes ring{0%{transform:scale(.8);opacity:.7}100%{transform:scale(1.6);opacity:0}}
+.section-head h2 span{display:inline-block;min-width:0}
+
 /* sections */
 .section{padding-top:104px}
 .section-head{margin-bottom:34px}
@@ -185,7 +196,7 @@ kbd{font:500 .75rem 'JetBrains Mono',monospace;border:1px solid var(--line);bord
   backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .5s;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
 .face.back{transform:rotateX(180deg);background:var(--green);color:#fff;border-color:var(--green);font-size:.82rem}
 .gold .face.back{background:var(--yellow);border-color:var(--yellow)}
-.strength-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0 0 26px}
+.strength-row{display:flex;flex-direction:column;gap:8px;margin:-4px 0 24px}
 .strength-label{font:500 .75rem 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
 .strength-pills{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
 .strength-pills li{padding:5px 14px;border-radius:999px;border:1px solid var(--green);background:color-mix(in srgb,var(--green) 12%,var(--surface));font-weight:600;font-size:.88rem}
