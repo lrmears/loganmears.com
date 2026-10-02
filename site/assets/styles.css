@@ -213,12 +213,12 @@ kbd{font:500 .75rem 'JetBrains Mono',monospace;border:1px solid var(--line);bord
 .run-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:16px;margin-top:20px}
 .run-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow);min-width:0}
 .run-card .sub{margin:0 0 12px}
-.cum-svg{width:100%;height:150px;display:block;overflow:visible}
-.cum-svg .grid{stroke:var(--line);stroke-width:1;vector-effect:non-scaling-stroke}
+.cum-svg{width:100%;height:auto;display:block;overflow:visible}
+.cum-svg .grid{stroke:var(--line);stroke-width:.6}
 .cum-svg .area{fill:color-mix(in srgb,var(--green) 18%,transparent)}
-.cum-svg .line{fill:none;stroke:var(--green);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1}
+.cum-svg .line{fill:none;stroke:var(--green);stroke-width:2;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
 .cum-svg .line.draw{stroke-dashoffset:0;transition:stroke-dashoffset 1.4s ease}
-.cum-svg .pt{fill:var(--surface);stroke:var(--green);stroke-width:2;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .15s}
+.cum-svg .pt{fill:var(--surface);stroke:var(--green);stroke-width:1.6;opacity:0;transition:opacity .15s}
 .cum-svg .pt.on{opacity:1}
 .cum-axis{display:flex;justify-content:space-between;font:500 .68rem 'JetBrains Mono',monospace;color:var(--muted);margin-top:6px}
 .donut-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
