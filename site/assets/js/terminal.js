@@ -10,6 +10,53 @@ const store = {
   get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 };
+// Country outlines are a separate (~80 KB) module, loaded lazily so the page itself stays light.
+let outlinesP = null;
+const loadOutlines = () => outlinesP || (outlinesP = import('./outlines.js?v=__BUILD__').then(m => m.OUTLINES).catch(() => ({})));
+const SVGNS = 'http://www.w3.org/2000/svg';
+function outlineSvg(outlines, name, tone) {
+  const svg = document.createElementNS(SVGNS, 'svg'); svg.setAttribute('class', 'ol ' + tone); svg.setAttribute('aria-hidden', 'true');
+  const o = outlines[name], shape = document.createElementNS(SVGNS, o ? 'path' : 'circle');
+  if (o) { svg.setAttribute('viewBox', `-3 -3 ${o[0] + 6} ${o[1] + 6}`); shape.setAttribute('d', o[2]); shape.setAttribute('fill-rule', 'evenodd'); }
+  else { svg.setAttribute('viewBox', '0 0 100 100'); shape.setAttribute('cx', 50); shape.setAttribute('cy', 50); shape.setAttribute('r', 7); } // too small to outline: a dot
+  svg.appendChild(shape); return svg;
+}
+// ---- Daily history and streaks (kept in this browser only) ----
+const HKEY = 'tstats';
+const isoDay = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const noon = iso => Date.parse(iso + 'T12:00:00');
+function loadHistory() {
+  const raw = store.get(HKEY, null), days = {};
+  if (raw && typeof raw.days === 'object' && raw.days) {
+    Object.entries(raw.days).slice(0, 2000).forEach(([k, v]) => {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(k) && v && (v.w === 0 || v.w === 1) && Number.isInteger(v.g) && v.g >= 1 && v.g <= 6) days[k] = { w: v.w, g: v.g, c: Number.isInteger(v.c) ? v.c : 0 };
+    });
+  }
+  return { days };
+}
+function recordDay(won, guesses, clues) {
+  const h = loadHistory(), k = isoDay();
+  if (h.days[k]) return false;            // one daily result per day
+  h.days[k] = { w: won ? 1 : 0, g: guesses, c: clues };
+  store.set(HKEY, h); return true;
+}
+function computeStats(h) {
+  const keys = Object.keys(h.days).sort();
+  let best = 0, run = 0, prev = null; const dist = [0, 0, 0, 0, 0, 0]; let wins = 0, guessSum = 0;
+  keys.forEach(k => {
+    const d = h.days[k];
+    if (d.w) { run = prev && h.days[prev].w && Math.round((noon(k) - noon(prev)) / 864e5) === 1 ? run + 1 : 1; best = Math.max(best, run); wins++; dist[d.g - 1]++; guessSum += d.g; } else run = 0;
+    prev = k;
+  });
+  // Current streak: counts back from today, or from yesterday if today's case isn't played yet.
+  const today = isoDay(), yest = isoDay(new Date(Date.now() - 864e5));
+  let k = h.days[today] ? today : (h.days[yest] ? yest : null), cur = 0;
+  while (k && h.days[k] && h.days[k].w) { cur++; k = isoDay(new Date(noon(k) - 864e5)); }
+  const last14 = Array.from({ length: 14 }, (_, i) => { const day = isoDay(new Date(Date.now() - (13 - i) * 864e5)); return { day, state: h.days[day] ? (h.days[day].w ? 'win' : 'loss') : 'none' }; });
+  return { played: keys.length, wins, pct: keys.length ? Math.round(wins / keys.length * 100) : 0, avg: wins ? (guessSum / wins).toFixed(1) : '–', cur, best, dist, last14, todayGuesses: h.days[today] && h.days[today].w ? h.days[today].g : 0 };
+}
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+
 const dayKey = () => { const d = new Date(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; };
 const dayIndex = () => Math.floor((new Date().setHours(0, 0, 0, 0) - EPOCH) / 864e5);
 
@@ -37,20 +84,39 @@ export function initTerminal() {
   const screen = $('t-screen'), input = $('t-input'), box = $('terminal');
   let target, daily, clues, guesses, over, cmds, hist = [], hi = 0, ip;
 
-  const line = (text, cls = '') => { const p = document.createElement('div'); p.className = 't-line ' + cls; p.textContent = text; screen.appendChild(p); screen.scrollTop = screen.scrollHeight; return p; };
+  const line = (text, cls = '', shape = null) => {
+    const p = document.createElement('div'); p.className = 't-line ' + cls;
+    if (shape) {
+      p.classList.add('has-ol');
+      const slot = document.createElement('span'); slot.className = 'ol-slot' + (shape.big ? ' big' : '');
+      const label = document.createElement('span'); label.textContent = text; p.append(slot, label);
+      loadOutlines().then(O => { slot.appendChild(outlineSvg(O, shape.name, shape.tone)); screen.scrollTop = screen.scrollHeight; });
+    } else p.textContent = text;
+    screen.appendChild(p); screen.scrollTop = screen.scrollHeight; return p;
+  };
   const gap = () => line('');
 
   function start(isDaily) {
     daily = isDaily;
     const i = isDaily ? ((dayIndex() * 13 + 5) % COUNTRIES.length + COUNTRIES.length) % COUNTRIES.length : Math.floor(Math.random() * COUNTRIES.length);
     target = COUNTRIES[i]; clues = new Set(); guesses = []; cmds = []; over = false;
+    syncChips();
     ip = `203.0.113.${(isDaily ? dayIndex() * 37 : Math.floor(Math.random() * 250)) % 250 + 2}`;
-    $('t-mode').textContent = isDaily ? 'Daily' : 'Practice';
-    $('t-practice').textContent = isDaily ? 'Practice case' : 'Back to daily';
+    [['t-mode-daily', true], ['t-mode-practice', false]].forEach(([id, d]) => { const b = $(id); b.classList.toggle('active', isDaily === d); b.setAttribute('aria-pressed', isDaily === d); });
     $('t-result').hidden = true;
     screen.innerHTML = '';
     banner();
     if (isDaily) { const s = store.get('tdaily', null); if (s && s.day === dayKey() && Array.isArray(s.cmds)) s.cmds.slice(0, 40).forEach(c => typeof c === 'string' && c.length < 80 && run(c, true)); }
+  }
+
+  // Quick-command buttons show which clues are already used, and dim once the case is closed.
+  function syncChips() {
+    $('t-chips').classList.toggle('over', !!over);
+    document.querySelectorAll('.t-chip').forEach(b => {
+      const used = clues.has(b.dataset.cmd);
+      b.classList.toggle('used', used);
+      b.setAttribute('aria-label', used ? `${b.dataset.cmd} (already used)` : b.dataset.cmd);
+    });
   }
 
   function banner() {
@@ -82,7 +148,7 @@ export function initTerminal() {
     ['whois', 'registrant top-level domain'], ['ping', 'round-trip latency from Omaha'], ['tz', 'timezone seen in session logs'],
     ['lang', 'browser language header'], ['phone', 'MFA phone prefix'], ['continent', 'ASN registry region'],
     ['traceroute', 'network path (reveals the nearest city)'], ['guess <country>', 'submit your attribution'],
-    ['countries', 'list valid answers'], ['history', 'show your guesses'], ['clear', 'clear the screen'], ['new', 'start a practice case']
+    ['countries', 'list valid answers'], ['history', 'show your guesses'], ['stats', 'daily record and streak'], ['expand', 'fill the screen (Esc to exit)'], ['clear', 'clear the screen'], ['new', 'start a practice case']
   ];
 
   function run(raw, replay = false) {
@@ -95,7 +161,7 @@ export function initTerminal() {
 
     if (CLUES[c]) {
       if (!replay) { cmds.push(text); save(); note(1 + clues.size, .08, 'square'); }
-      clues.add(c);
+      clues.add(c); syncChips();
       CLUES[c]().forEach(l => line(l, 'ok'));
     } else if (c === 'guess' || c === 'g') {
       if (!arg) return line('usage: guess <country>', 'warn');
@@ -103,16 +169,24 @@ export function initTerminal() {
       if (guesses.includes(g)) return line(`Already tried ${g.name}.`, 'warn');
       if (!replay) { cmds.push(text); save(); }
       guesses.push(g);
-      if (g === target) return win();
+      if (g === target) return win(replay);
       const d = Math.round(distKm([g.lat, g.lon], [target.lat, target.lon])), [dir, ar] = arrow([g.lat, g.lon], [target.lat, target.lon]);
       const near = Math.max(0, Math.round((1 - d / 20000) * 100));
-      line(`✗ ${g.name}: ${d.toLocaleString()} km ${dir} ${ar}  (${near}% close)`, 'bad');
+      line(`✗ ${g.name}: ${d.toLocaleString()} km ${dir} ${ar}  (${near}% close)`, 'bad', { name: g.name, tone: 'miss' });
       if (!replay) note(0, .2, 'sawtooth');
-      if (guesses.length >= MAX_GUESSES) lose(); else line(`${MAX_GUESSES - guesses.length} attempts remaining.`, 'dim');
+      if (guesses.length >= MAX_GUESSES) lose(replay); else line(`${MAX_GUESSES - guesses.length} attempts remaining.`, 'dim');
     } else if (c === 'help' || c === '?') {
       HELP.forEach(([k, v]) => line(`  ${k.padEnd(18)} ${v}`));
     } else if (c === 'countries') {
       line(COUNTRIES.map(x => x.name).join(', '), 'dim');
+    } else if (c === 'stats') {
+      const s = computeStats(loadHistory());
+      if (!s.played) line('No daily games recorded yet. Solve today\'s case to start a streak.', 'dim');
+      else {
+        line(`played ${s.played} · won ${s.wins} (${s.pct}%) · avg ${s.avg} guesses`);
+        line(`current streak ${plural(s.cur, 'day')} · best ${plural(s.best, 'day')}`, 'ok');
+        line('last 14 days: ' + s.last14.map(d => d.state === 'win' ? '🟩' : d.state === 'loss' ? '🟥' : '⬛').join(''));
+      }
     } else if (c === 'history') {
       guesses.length ? guesses.forEach((g, i) => line(`  ${i + 1}. ${g.name}`)) : line('No guesses yet.', 'dim');
     } else if (c === 'clear') {
@@ -123,29 +197,37 @@ export function initTerminal() {
     } else if (c === 'whoami') { line('analyst');
     } else if (c === 'sudo') { line('analyst is not in the sudoers file. This incident will be reported.', 'warn');
     } else if (c === 'cat') { line(arg ? `cat: ${arg}: Permission denied` : 'usage: cat <file>', 'warn');
-    } else if (c === 'exit') { line('There is no escape. Only incident response.', 'dim');
+    } else if (c === 'expand' || c === 'fullscreen') { setExpanded(true);
+    } else if (c === 'exit') { if (expanded) { line('logout', 'dim'); setExpanded(false); } else line('There is no escape. Only incident response.', 'dim');
     } else { line(`${cmd}: command not found. Try "help".`, 'warn'); }
   }
 
   const save = () => daily && store.set('tdaily', { day: dayKey(), cmds });
 
+  let streakNow = 0;
   function summary(won) {
     const marks = guesses.map((g, i) => (g === target ? '🟩' : (d => d < 1000 ? '🟩' : d < 3000 ? '🟨' : d < 7000 ? '🟧' : '🟥')(distKm([g.lat, g.lon], [target.lat, target.lon])))).join('');
-    return `GeoTrace ${daily ? '#' + (dayIndex() + 1) : '(practice)'} ${won ? guesses.length : 'X'}/${MAX_GUESSES} · ${clues.size} clues\n${marks}\nloganmears.com`;
+    return `GeoTrace ${daily ? '#' + (dayIndex() + 1) : '(practice)'} ${won ? guesses.length : 'X'}/${MAX_GUESSES} · ${plural(clues.size, 'clue')}\n${marks}${won && daily && streakNow > 1 ? `\n🔥 ${streakNow}-day streak` : ''}\nloganmears.com`;
   }
-  function win() {
-    over = true; gap();
-    line(`✓ ATTRIBUTION CONFIRMED: ${target.name}`, 'good');
+  function win(replay) {
+    over = true; syncChips(); gap();
+    line(`✓ ATTRIBUTION CONFIRMED: ${target.name}`, 'good', { name: target.name, tone: 'win', big: true });
     line(`Solved in ${guesses.length} guess${guesses.length > 1 ? 'es' : ''} using ${clues.size} recon command${clues.size === 1 ? '' : 's'}.`, 'good');
-    finish(true); fanfare();
-    const r = box.getBoundingClientRect(); confetti(r.left + r.width / 2, r.top + r.height / 3);
+    finish(true, replay);
+    if (!replay) { fanfare(); const r = box.getBoundingClientRect(); confetti(r.left + r.width / 2, r.top + r.height / 3); }
   }
-  function lose() {
-    over = true; gap();
-    line(`✗ Out of attempts. The origin was ${target.name} (${target.capital}).`, 'bad');
-    finish(false);
+  function lose(replay) {
+    over = true; syncChips(); gap();
+    line(`✗ Out of attempts. The origin was ${target.name} (${target.capital}).`, 'bad', { name: target.name, tone: 'reveal', big: true });
+    finish(false, replay);
   }
-  function finish(won) { $('t-share-text').textContent = summary(won); $('t-result').hidden = false; }
+  function finish(won, replay) {
+    if (daily && !replay && recordDay(won, guesses.length, clues.size)) {
+      const s = computeStats(loadHistory()); streakNow = s.cur; renderStreak();
+      line(won ? `🔥 Streak: ${plural(s.cur, 'day')} (best ${s.best})` : `Streak reset. Best so far: ${plural(s.best, 'day')}.`, won ? 'good' : 'dim');
+    } else if (daily) streakNow = computeStats(loadHistory()).cur;
+    $('t-share-text').textContent = summary(won); $('t-result').hidden = false;
+  }
 
   function complete() {
     const v = input.value, m = v.match(/^(guess|g)\s+(.*)$/i);
@@ -155,7 +237,7 @@ export function initTerminal() {
       else if (hits.length > 1) line(hits.map(h => h.name).join('  '), 'dim');
       return;
     }
-    const names = [...Object.keys(CLUES), 'guess', 'help', 'countries', 'history', 'clear', 'new'];
+    const names = [...Object.keys(CLUES), 'guess', 'help', 'countries', 'history', 'stats', 'expand', 'clear', 'new'];
     const hits = names.filter(n => n.startsWith(v.toLowerCase()));
     if (hits.length === 1) input.value = hits[0] + (hits[0] === 'guess' ? ' ' : '');
     else if (hits.length > 1) line(hits.join('  '), 'dim');
@@ -170,15 +252,57 @@ export function initTerminal() {
   });
   box.addEventListener('click', e => { if (!getSelection().toString() && !e.target.closest('button')) input.focus({ preventScroll: true }); });
   document.querySelectorAll('.t-chip').forEach(b => b.addEventListener('click', () => { run(b.dataset.cmd); }));
-  $('t-practice').addEventListener('click', () => start(!daily));
+  $('t-mode-daily').addEventListener('click', () => { if (!daily) start(true); });
+  $('t-mode-practice').addEventListener('click', () => start(false)); // always a fresh practice case
   $('t-share').addEventListener('click', async () => {
     try { await navigator.clipboard.writeText($('t-share-text').textContent); $('t-share').textContent = 'Copied!'; } catch (e) { $('t-share').textContent = 'Copy failed'; }
     setTimeout(() => $('t-share').textContent = 'Copy result', 1800);
+  });
+  function renderStreak() {
+    const s = computeStats(loadHistory()); $('t-streak').textContent = '🔥 ' + s.cur;
+    $('t-streak').setAttribute('aria-label', `Current streak: ${plural(s.cur, 'day')}`);
+  }
+  const mk = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  function renderStatsDialog() {
+    const s = computeStats(loadHistory()), body = $('t-stats-body'); body.replaceChildren();
+    const nums = mk('div', 'hs-nums');
+    [[s.played, 'Played'], [s.pct + '%', 'Win rate'], [s.cur, 'Streak'], [s.best, 'Best streak']].forEach(([n, l]) => { const d = mk('div'); d.append(mk('b', '', String(n)), mk('span', '', l)); nums.appendChild(d); });
+    const max = Math.max(1, ...s.dist), dist = mk('div', 'hs-dist');
+    s.dist.forEach((n, i) => { const bar = mk('i', i + 1 === s.todayGuesses ? 'hit' : '', String(n)); bar.style.setProperty('width', Math.max(8, n / max * 100) + '%'); dist.append(mk('span', '', String(i + 1)), bar); });
+    const days = mk('div', 'hs-days'); days.setAttribute('role', 'img'); days.setAttribute('aria-label', 'Last 14 days: ' + s.last14.map(d => d.state === 'win' ? 'win' : d.state === 'loss' ? 'loss' : 'no game').join(', '));
+    s.last14.forEach(d => { const i = mk('i', d.state); i.title = d.day; days.appendChild(i); });
+    body.append(nums, mk('h4', '', 'Guesses to solve'), dist, mk('h4', '', 'Last 14 days'), days, mk('p', 'muted fine', s.played ? `Average ${s.avg} guesses on solved cases. Only daily cases count; results stay in this browser.` : 'Play today\'s daily case to start your history. Results stay in this browser.'));
+  }
+  const sd = $('t-stats-dialog');
+  $('t-stats-btn').addEventListener('click', () => { renderStatsDialog(); sd.showModal(); });
+  sd.addEventListener('click', e => { if (e.target === sd) sd.close(); });
+  let armed = null;
+  $('t-stats-clear').addEventListener('click', e => {
+    if (!armed) { e.target.textContent = 'Click again to confirm'; armed = setTimeout(() => { armed = null; e.target.textContent = 'Clear history'; }, 3000); return; }
+    clearTimeout(armed); armed = null; store.set(HKEY, { days: {} }); e.target.textContent = 'Clear history'; renderStatsDialog(); renderStreak();
+  });
+  // Expand: the terminal panel fills the whole viewport (everything behind it is made inert).
+  const panel = document.querySelector('.terminal-panel'), expBtn = $('t-expand');
+  let expanded = false;
+  function setExpanded(on) {
+    if (on === expanded) return; expanded = on;
+    panel.classList.toggle('expanded', on); document.documentElement.classList.toggle('t-expanded', on);
+    document.querySelectorAll('.nav, .hero, main > section:not(#play), #play .section-head, .footer, .progress').forEach(e => e.toggleAttribute('inert', on));
+    expBtn.setAttribute('aria-expanded', on); expBtn.setAttribute('aria-label', on ? 'Exit full screen' : 'Expand to full screen'); expBtn.title = on ? 'Exit (Esc)' : 'Expand (Esc to exit)';
+    if (on) { panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'true'); panel.setAttribute('aria-label', 'GeoTrace, expanded'); input.focus({ preventScroll: true }); }
+    else { ['role', 'aria-modal', 'aria-label'].forEach(a => panel.removeAttribute(a)); expBtn.focus({ preventScroll: true }); }
+    screen.scrollTop = screen.scrollHeight;
+  }
+  expBtn.addEventListener('click', () => setExpanded(!expanded));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && expanded && !document.querySelector('dialog[open]') && $('palette').hidden) setExpanded(false);
   });
   const how = $('how');
   const openHelp = () => how.showModal();
   $('how-open').addEventListener('click', openHelp);
   how.addEventListener('click', e => { if (e.target === how) how.close(); });
+  setTimeout(loadOutlines, 1200);
+  renderStreak();
   start(true);
-  return { openHelp, focus: () => input.focus({ preventScroll: true }), practice: () => start(false) };
+  return { expand: () => setExpanded(true), openHelp, focus: () => input.focus({ preventScroll: true }), practice: () => start(false) };
 }

@@ -102,6 +102,7 @@ initPalette([
   { label: 'Go to Toolkit', hint: 'section', run: go('toolkit') },
   { label: 'Go to Contact', hint: 'section', run: go('contact') },
   { label: 'Play GeoTrace (daily case)', hint: 'game', run: () => { go('play')(); setTimeout(terminal.focus, 500); } },
+  { label: 'Expand GeoTrace (full screen)', hint: 'game', run: () => terminal.expand() },
   { label: 'Start a practice case', hint: 'game', run: () => { terminal.practice(); go('play')(); setTimeout(terminal.focus, 500); } },
   { label: 'How to play GeoTrace', hint: 'help', run: () => { go('play')(); setTimeout(terminal.openHelp, 400); } },
   { label: 'Toggle dark mode', hint: 'theme', run: toggleTheme },
