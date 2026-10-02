@@ -1,6 +1,6 @@
 import { note, fanfare } from './sound.js';
 
-const PLAIN = 'SAXOPHONE AND SECURITY WALK INTO A BAR';
+const PLAIN = 'PHISHING ONLY NEEDS ONE CLICK TO WORK';
 const KEY = 17; // ciphertext is PLAIN shifted forward by KEY; the dial shifts back
 
 const shift = (s, n) => s.replace(/[A-Z]/g, c => String.fromCharCode((c.charCodeAt(0) - 65 + n + 26) % 26 + 65));
