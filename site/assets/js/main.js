@@ -3,7 +3,6 @@ import { initPalette } from './palette.js?v=__BUILD__';
 import { initTimeline } from './timeline.js?v=__BUILD__';
 import { initRunning } from './running.js?v=__BUILD__';
 import * as sound from './sound.js?v=__BUILD__';
-import { decryptHeadings } from './fx.js?v=__BUILD__';
 
 const $ = id => document.getElementById(id);
 const root = document.documentElement;
@@ -84,7 +83,6 @@ const terminal = initTerminal();
 initRunning();
 
 // Effects
-decryptHeadings('.section-head h2');
 const avatar = document.querySelector('.avatar');
 if (avatar && !reduced && matchMedia('(hover: hover)').matches) {
   avatar.addEventListener('pointermove', e => {
