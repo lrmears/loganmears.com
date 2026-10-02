@@ -28,7 +28,7 @@
 <nav class="nav" aria-label="Primary">
   <a class="brand" href="#top" aria-label="Logan Mears, back to top">LM</a>
   <div class="nav-links">
-    <a href="#about">About</a><a href="#timeline">Timeline</a><a href="#play">Play</a><a href="#toolkit">Toolkit</a><a href="#contact">Contact</a>
+    <a href="#about">About</a><a href="#timeline">Timeline</a><a href="#play">Play</a><a href="#running">Running</a><a href="#toolkit">Toolkit</a><a href="#contact">Contact</a>
   </div>
   <div class="nav-actions">
     <button class="kbd-btn" id="open-palette" type="button" aria-label="Open command menu"><span class="kbd-label">Jump to…</span><span class="kbd-menu" aria-hidden="true">☰</span><kbd>⌘K</kbd></button>
@@ -191,8 +191,25 @@
     </ul>
   </dialog>
 
+  <section class="section wrap" id="running">
+    <div class="section-head"><p class="kicker">04 · Running</p><h2>Recent miles.</h2>
+      <p>When I'm not in front of a screen, I'm usually running. Here's what the last month and the last twelve weeks look like, straight from my watch.</p></div>
+    <div class="run-cards" id="run-cards"></div>
+    <div class="run-chart-wrap">
+      <div class="run-chart-head"><h3 class="sub">Miles per week, last 12 weeks</h3></div>
+      <div class="run-chart" id="run-chart" role="group" aria-label="Miles per week for the last 12 weeks"></div>
+      <p class="run-readout" id="run-readout" role="status" aria-live="polite">Select a week for details.</p>
+    </div>
+    <div class="run-grid">
+      <div class="run-card" id="card-cum"><h3 class="sub">Total miles, last 12 weeks</h3><div id="chart-cum" class="chart-cum"></div><p class="run-readout" id="cum-readout" role="status" aria-live="polite">Hover the line for running totals.</p></div>
+      <div class="run-card" id="card-mix"><h3 class="sub">Indoor vs outdoor, last 12 weeks</h3><div class="donut-wrap"><div id="chart-mix" class="chart-mix"></div><ul class="donut-legend" id="mix-legend"></ul></div></div>
+      <div class="run-card" id="card-len"><h3 class="sub">Run length in miles, last 12 weeks</h3><div id="chart-len" class="chart-len" role="group" aria-label="Number of runs by distance"></div></div>
+    </div>
+    <p class="muted fine" id="run-asof"></p>
+  </section>
+
   <section class="section wrap" id="toolkit">
-    <div class="section-head"><p class="kicker">04 · Toolkit</p><h2>Tools and certifications.</h2><p>Select a tile to learn more.</p></div>
+    <div class="section-head"><p class="kicker">05 · Toolkit</p><h2>Tools and certifications.</h2><p>Select a tile to learn more.</p></div>
     <h3 class="sub">Tools</h3>
     <div class="flip-grid">
       <button class="flip" type="button"><span class="face front">Splunk</span><span class="face back">SIEM</span></button>
@@ -214,7 +231,7 @@
   </section>
 
   <section class="section wrap" id="contact">
-    <div class="section-head"><p class="kicker">05 · Contact</p><h2>Get in touch.</h2><p>Interested in connecting? Reach out on LinkedIn.</p></div>
+    <div class="section-head"><p class="kicker">06 · Contact</p><h2>Get in touch.</h2><p>Interested in connecting? Reach out on LinkedIn.</p></div>
     <div class="cta">
       <a class="btn primary" href="https://www.linkedin.com/in/loganrmears/" rel="noopener noreferrer">Connect on LinkedIn</a>
     </div>
