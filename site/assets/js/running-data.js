@@ -1,24 +1,19 @@
 // Recent running stats (aggregate snapshot). Contains no routes, locations, heart-rate or per-run data.
 export const RUNNING = {
-  "asOf": "2026-10-02",
+  "asOf": "2026-10-09",
   "source": "COROS",
   "last28": {
-    "miles": 25.8,
+    "miles": 24.9,
     "runs": 8,
-    "hours": 7.0,
+    "hours": 6.6,
     "longestMiles": 4.6
   },
   "year": {
     "year": 2026,
-    "miles": 188.0,
-    "runs": 67
+    "miles": 192.9,
+    "runs": 69
   },
   "weeks": [
-    {
-      "start": "2026-07-13",
-      "miles": 4.13,
-      "runs": 2
-    },
     {
       "start": "2026-07-20",
       "miles": 3.16,
@@ -73,16 +68,21 @@ export const RUNNING = {
       "start": "2026-09-28",
       "miles": 2.04,
       "runs": 1
+    },
+    {
+      "start": "2026-10-05",
+      "miles": 4.85,
+      "runs": 2
     }
   ],
   "mix": {
     "outdoor": {
-      "runs": 19,
-      "miles": 56.9
+      "runs": 20,
+      "miles": 60.0
     },
     "indoor": {
-      "runs": 13,
-      "miles": 32.8
+      "runs": 12,
+      "miles": 30.4
     }
   },
   "lengths": [
