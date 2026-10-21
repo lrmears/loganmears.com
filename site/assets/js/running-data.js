@@ -1,24 +1,19 @@
 // Recent running stats (aggregate snapshot). Contains no routes, locations, heart-rate or per-run data.
 export const RUNNING = {
-  "asOf": "2026-10-15",
+  "asOf": "2026-10-20",
   "source": "COROS",
   "last28": {
-    "miles": 25.0,
-    "runs": 8,
-    "hours": 6.4,
-    "longestMiles": 4.5
+    "miles": 23.1,
+    "runs": 7,
+    "hours": 5.7,
+    "longestMiles": 5.4
   },
   "year": {
     "year": 2026,
-    "miles": 200.8,
-    "runs": 71
+    "miles": 206.1,
+    "runs": 72
   },
   "weeks": [
-    {
-      "start": "2026-07-27",
-      "miles": 4.5,
-      "runs": 2
-    },
     {
       "start": "2026-08-03",
       "miles": 4.36,
@@ -71,18 +66,23 @@ export const RUNNING = {
     },
     {
       "start": "2026-10-12",
-      "miles": 7.91,
-      "runs": 2
+      "miles": 13.27,
+      "runs": 3
+    },
+    {
+      "start": "2026-10-19",
+      "miles": 0.0,
+      "runs": 0
     }
   ],
   "mix": {
     "outdoor": {
-      "runs": 20,
-      "miles": 62.7
+      "runs": 21,
+      "miles": 68.1
     },
     "indoor": {
-      "runs": 12,
-      "miles": 32.4
+      "runs": 10,
+      "miles": 27.9
     }
   },
   "lengths": [
@@ -92,7 +92,7 @@ export const RUNNING = {
     },
     {
       "label": "2 to 3",
-      "runs": 14
+      "runs": 12
     },
     {
       "label": "3 to 4",
@@ -100,7 +100,7 @@ export const RUNNING = {
     },
     {
       "label": "4+",
-      "runs": 5
+      "runs": 6
     }
   ]
 };
